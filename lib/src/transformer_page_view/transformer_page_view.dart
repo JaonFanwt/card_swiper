@@ -597,6 +597,14 @@ class _TransformerPageViewState extends State<TransformerPageView> {
   @override
   void dispose() {
     _controller?.removeListener(onChangeNotifier);
+
+    // --- PATH --- wtfan 2023-11-27
+    // fix memory leak
+    if (_pageController != widget.pageController) {
+      _pageController.dispose();
+    }
+    // --- END PATH --- wtfan 2023-11-27
+
     super.dispose();
   }
 }

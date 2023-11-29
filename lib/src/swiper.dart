@@ -373,6 +373,13 @@ abstract class _SwiperTimerMixin extends State<Swiper> {
   @override
   void dispose() {
     _controller.removeListener(_onController);
+    // --- PATH --- wtfan 2023-11-27
+    // fix memory leak
+    _controller.stopAutoplay();
+    if (_controller != widget.controller) {
+      _controller.dispose();
+    }
+    // --- END PATH --- wtfan 2023-11-27
     _stopAutoplay();
     super.dispose();
   }
@@ -408,6 +415,17 @@ class _SwiperState extends _SwiperTimerMixin {
       onTap: () => widget.onTap!(index),
       child: widget.itemBuilder!(context, index),
     );
+  }
+
+  @override
+  void dispose() {
+    // --- PATH --- wtfan 2023-11-27
+    // fix memory leak
+    _pageController?.dispose();
+    _pageController = null;
+    // --- END PATH --- wtfan 2023-11-27
+
+    super.dispose();
   }
 
   @override
